@@ -1,7 +1,7 @@
 import QtQuick
 import org.kde.plasma.private.kicker as Kicker
 
-Kicker.FavoritesModel {
+Kicker.SimpleFavoritesModel {
 	// Kicker.FavoritesModel must be a child object of RootModel.
 	// appEntry.actions() looks at the parent object for parent.appletInterface and will crash plasma if it can't find it.
 	// https://github.com/KDE/plasma-desktop/blob/master/applets/kicker/plugin/appentry.cpp#L151
