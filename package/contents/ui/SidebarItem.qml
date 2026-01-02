@@ -15,7 +15,7 @@ FlatButton {
 	QQC2.ToolTip {
 		id: control
 		visible: sidebarItem.hovered && !sidebarItem.expanded
-		text: sidebarItem.tooltipText
+		text: sidebarItem.tooltipText == "" ? sidebarItem.text : sidebarItem.tooltipText
 		delay: 0
 		x: parent.width + rightPadding
 		y: (parent.height - height) / 2
