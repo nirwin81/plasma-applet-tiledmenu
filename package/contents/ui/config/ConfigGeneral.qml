@@ -211,6 +211,10 @@ LibConfig.FormKCM {
 			{ value: "right", text: i18n("Right") },
 		]
 	}
+	LibConfig.CheckBox {
+		text: i18n("Use dynamic pusher")
+		configKey: 'dynamicTilePusher'
+	}
 
 
 

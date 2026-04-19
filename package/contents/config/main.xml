@@ -104,6 +104,9 @@
 			<!-- enum: left, center, right -->
 			<default>left</default>
 		</entry>
+		<entry name="dynamicTilePusher" type="bool">
+			<default>true</default>
+		</entry>
 		<entry name="appDescription" type="string">
 			<!-- enum: hidden, after, below -->
 			<default>after</default>

@@ -134,6 +134,9 @@ Item {
 			return Text.AlignLeft
 		}
 	}
+	readonly property bool dynamicTilePusher: {
+		return plasmoid.configuration.dynamicTilePusher
+	}
 	
 	// App Description Enum (hidden, after, below)
 	readonly property bool appDescriptionVisible: plasmoid.configuration.appDescription !== 'hidden'
