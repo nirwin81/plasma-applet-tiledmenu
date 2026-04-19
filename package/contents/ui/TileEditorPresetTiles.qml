@@ -139,7 +139,7 @@ TileEditorGroupBox {
 		//--- Steam
 		// 4x2
 		TileEditorPresetTileButton {
-			filename: 'steam_' + steamGameId + '_4x2.jpg'
+			filename: 'tiledmenu_steam_' + steamGameId + '_4x2.jpg'
 			property string tileImageUrl: 'https://steamcdn-a.akamaihd.net/steam/apps/' + steamGameId + '/header.jpg'
 			source: isSteamGameLauncher ? tileImageUrl : ''
 			w: 4
@@ -148,7 +148,7 @@ TileEditorGroupBox {
 
 		// 3x1
 		TileEditorPresetTileButton {
-			filename: 'steam_' + steamGameId + '_3x1.jpg'
+			filename: 'tiledmenu_steam_' + steamGameId + '_3x1.jpg'
 			property string tileImageUrl: 'https://steamcdn-a.akamaihd.net/steam/apps/' + steamGameId + '/capsule_184x69.jpg'
 			source: isSteamGameLauncher ? tileImageUrl : ''
 			w: 3
@@ -157,7 +157,7 @@ TileEditorGroupBox {
 
 		// 5x3 or 3x2
 		TileEditorPresetTileButton {
-			filename: 'steam_' + steamGameId + '_5x3.jpg'
+			filename: 'tiledmenu_steam_' + steamGameId + '_5x3.jpg'
 			property string tileImageUrl: 'https://steamcdn-a.akamaihd.net/steam/apps/' + steamGameId + '/capsule_616x353.jpg'
 			source: isSteamGameLauncher ? tileImageUrl : ''
 			w: 3
@@ -166,7 +166,7 @@ TileEditorGroupBox {
 
 		// 5x2 or 2x1
 		TileEditorPresetTileButton {
-			filename: 'lutris_' + lutrisGameSlug + '_2x1.jpg'
+			filename: 'tiledmenu_lutris_' + lutrisGameSlug + '_2x1.jpg'
 			// property string tileImageUrl: '/home/' + kuser.loginName + '/.local/share/lutris/banners/' + lutrisGameSlug + '.jpg'
 			// source: (isLutrisGameLauncher && kuser.loginName) ? tileImageUrl : ''
 			property string tileImageUrl: 'https://lutris.net/games/banner/' + lutrisGameSlug + '.jpg'

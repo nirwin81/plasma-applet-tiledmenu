@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtCore
 
 Item {
 	id: presetTileButton
@@ -38,27 +39,10 @@ Item {
 	}
 
 	function getDownloadDir() {
-		// plasmoid.downloadPath() will create this folder.
-		// ~/Downloads/Plasma/com.github.zren.tiledmenu/
-		// I litters the Downloads folder... which isn't ideal.
-		return plasmoid.downloadPath()
-
-		// TODO: Download to ~/.local/share since it's hidden.
-		// Note, this folder does not exist! So we need to create it somehow.
-		// Maybe we could run `mkdir -p /path/to/folder` using the exec dataengine.
-
-		// Requires: import Qt.labs.platform 1.0
-		// ~/.local/share/
-		// var localDownloadDir = StandardPaths.writableLocation(StandardPaths.GenericDataLocation)
-		// console.log('localDownloadDir', localDownloadDir)
-
-		// Remove file:// URL scheme
-		// localFilepath = localDownloadDir.substr('file://'.length)
-
-		// ~/.local/share/plasma_com.github.zren.tiledmenu
-		// var tiledMenuDir = localDownloadDir + '/' + 'plasma_' + plasmoid.pluginName
-		// console.log('tiledMenuDir', tiledMenuDir)
-		// return tiledMenuDir
+		// Save directly into ~/.local/share/ which is guaranteed to exist.
+		// Filenames should include a tiledmenu_ prefix to avoid collisions.
+		var dataDir = StandardPaths.writableLocation(StandardPaths.GenericDataLocation)
+		return dataDir.toString().replace(/^file:\/\//, '') + '/'
 	}
 
 	function resizeTile() {
@@ -96,7 +80,6 @@ Item {
 			var localFilepath = tiledMenuDir + filename
 			logger.debug('localFilepath', localFilepath)
 
-			// Save tile image to file
 			logger.debug('grabToImage.start')
 			image.grabToImage(function(result){
 				logger.debug('grabToImage.done', result, result.url)
