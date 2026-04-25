@@ -691,6 +691,8 @@ DropArea {
 		for( var xPos = tileXPos+1; xPos+tileWidth-1 < columns && (steps < smallestDistance || smallestDistance == 0); ++xPos )
 		{
 			++steps
+			if (smallestDistance !== 0 && steps >= smallestDistance)
+				break
 			if ( isAreaEmpty(xPos, tileYPos, tileWidth, tileHeight, tile) &&
 				!isAreaWithinArea(xPos, tileYPos, xPos+tileWidth-1, tileYPos+tileHeight-1, avoidX, avoidY, avoidX+avoidW-1, avoidY+avoidH-1) &&
 				(!isDraggingGroup || !isAreaInAnyGroup(xPos, tileYPos, tileWidth, tileHeight, tileGroupHeader)) )
@@ -713,6 +715,8 @@ DropArea {
 		for( var yPos = tileYPos-1; yPos >= 0 && (steps < smallestDistance || smallestDistance == 0); --yPos )
 		{
 			++steps
+			if (smallestDistance !== 0 && steps >= smallestDistance)
+				break
 			if (tileGroupHeader && isAreaWithinArea(tileXPos, yPos, tileXPos+tileWidth-1, yPos+tileHeight-1, tileGroupHeader.x, tileGroupHeader.y, tileGroupHeader.x+tileGroupHeader.w-1, tileGroupHeader.y+tileGroupHeader.h-1)) {
 				break
 			}
@@ -739,6 +743,8 @@ DropArea {
 		for( var yPos = tileYPos+1; yPos+heightToCheck-1 < (rows + heightToCheck) && (steps < smallestDistance || smallestDistance == 0); ++yPos )
 		{
 			++steps
+			if (smallestDistance !== 0 && steps >= smallestDistance)
+				break
 			if ( isAreaEmpty(tileXPos, yPos, tileWidth, heightToCheck, tile) &&
 				!isAreaWithinArea(tileXPos, yPos, tileXPos+tileWidth-1, yPos+heightToCheck-1, avoidX, avoidY, avoidX+avoidW-1, avoidY+avoidH-1) &&
 				(!isDraggingGroup || !isAreaInAnyGroup(tileXPos, yPos, tileWidth, heightToCheck, tile.tileType == 'group' ? tile : tileGroupHeader)) )
