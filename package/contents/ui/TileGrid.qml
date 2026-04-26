@@ -351,50 +351,26 @@ DropArea {
 	}
 
 	function snapbackTile(tile) {
-		console.log('~~~ snapBackTile')
 		if (!tile) {
-			//console.log('snapbackTile early return 1')
 			return
 		}
 		if (tile.pushedFromX == -1 || tile.pushedFromY == -1) {
-			//console.log('///// snapbackTile early return 2')
 			return
 		}
 		var groupToIgnore = tile.tileType === 'group' ? tile : null
 		if (groupToIgnore === null && isTileInGroup(tile)) {
 			groupToIgnore = getGroupForTile(tile)
-		} 
-		var snapCheckH = tile.h
-		console.log('snapCheckH was initially: ', snapCheckH)
-		if (tile.tileType === 'group') {
-			snapCheckH += getGroupAreaRect(tile, draggedItem).h
 		}
+		var snapAreaRect = (tile.tileType === 'group') ? getGroupAreaRect(tile, draggedItem) : null
+		var snapCheckH = tile.h + (snapAreaRect ? snapAreaRect.h : 0)
 
-		// First check original location
-		console.log('Checking original location: ', tile.pushedFromX, ',', tile.pushedFromY,'. tile.w: ',tile.w,' snapCheckH: ', snapCheckH)
-		if( groupToIgnore !== null ) {
-			console.log('groupToIgnore (xy): ',groupToIgnore.x,',',groupToIgnore.y)
-		}
 		if (!hits(tile.pushedFromX, tile.pushedFromY, tile.w, snapCheckH, tile, groupToIgnore, null)) {
-			console.log('Area was empty')
 			moveTileAnimated(tile, tile.pushedFromX, tile.pushedFromY)
-			//console.log('///// Resetting pushedFrom values 3')
 			tile.pushedFromX = -1
 			tile.pushedFromY = -1
 			pushedTiles.splice(pushedTiles.indexOf(tile), 1)
 			updateSize()
 			return
-		} else {
-			// Print the contents of this hitBox map to aid debugging
-			var hbStr = 'hitBox (x,y):\n'
-			for (var hbY = 0; hbY < hitBox.length; ++hbY) {
-				var row = ''
-				for (var hbX = 0; hbX < hitBox[hbY].length; ++hbX) {
-					row += hitBox[hbY][hbX] ? '[X]' : '[ ]'
-				}
-				hbStr += 'y=' + hbY + '  ' + row + '\n'
-			}
-			console.log(hbStr)
 		}
 
 		// Find out how far back the tile can snap
@@ -428,7 +404,6 @@ DropArea {
 
 		// Snap it back to the appropriate place
 		if (xPosToUse !== -1 && yPosToUse !== -1) {
-			console.log('NDSI: Snapback occurred')
 			moveTileAnimated(tile, xPosToUse, yPosToUse)
 			onExited
 		}
@@ -873,6 +848,8 @@ DropArea {
 
 	function getTileAt(cellX, cellY) {
 		for (var i = 0; i < tileModel.length; i++) {
+			if (i === draggedIndex) continue
+			if (draggedGroupMembers.length > 0 && draggedGroupMembers.indexOf(tileModel[i]) >= 0) continue
 			var tile = tileModel[i]
 			if (tileWithin(tile, cellX, cellY, cellX, cellY)) {
 				return tile
