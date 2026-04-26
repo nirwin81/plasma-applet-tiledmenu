@@ -148,8 +148,6 @@ DropArea {
 				}
 			}
 		}
-
-		console.log('draggedItem: ', draggedItem)
 	}
 
 	function tileWithin(tile, x1, y1, x2, y2) {
@@ -245,14 +243,14 @@ DropArea {
 	}
 
 	function moveGroupContentsAnimated(groupTile, deltaX, deltaY) {
-		var area = getGroupAreaRect(groupTile)
+		var area = getGroupAreaRect(groupTile, draggedItem)
 
 		// Move tiles below group label
 		for (var i = 0; i < tileModel.length; i++) {
 			var tile = tileModel[i]
 			if (tile === draggedItem) continue
 			if (draggedGroupMembers.indexOf(tile) >= 0) continue
-			if (tileWithin(tile, area.x1, area.y1, area.x2, area.y2)) {
+			if (tile.y >= area.y1 && tileWithin(tile, area.x1, area.y1, area.x2, area.y2)) {
 				var item = i >= 0 ? tileModelRepeater.itemAt(i) : null
 				if (item) {
 					item.targetX = (tile.x + deltaX) * cellBoxSize
@@ -282,12 +280,12 @@ DropArea {
 		var area = getGroupAreaRect(groupTile)
 		for (var i = 0; i < tileModel.length; i++) {
 			var tileInGroup = tileModel[i]
-			if (tileWithin(tileInGroup, area.x1, area.y1, area.x2, area.y2)) {
+			if (tileInGroup.y >= area.y1 && tileWithin(tileInGroup, area.x1, area.y1, area.x2, area.y2)) {
 				if (tileInGroup == tile) {
 					return true
 				}
 			}
-			
+
 		}
 		return false
 	}
@@ -654,7 +652,7 @@ DropArea {
 		var tileWidth = tile.w
 		var tileHeight = tile.h
 		if (respectGroups && tile.tileType == 'group') {
-			tileHeight = tile.h + getGroupAreaRect(tile).h
+			tileHeight = tile.h + getGroupAreaRect(tile, draggedItem).h
 		}
 
 		var tileGroupHeader = getGroupForTile(tile)
@@ -739,7 +737,7 @@ DropArea {
 		}
 		// Check down
 		steps = 0
-		var heightToCheck = (tile.tileType === 'group' && !respectGroups) ? getGroupAreaRect(tileGroupHeader !== null ? groupAreaRect : tile).h : tileHeight
+		var heightToCheck = (tile.tileType === 'group' && !respectGroups) ? (tile.h + getGroupAreaRect(tile).h) : tileHeight
 		for( var yPos = tileYPos+1; yPos+heightToCheck-1 < (rows + heightToCheck) && (steps < smallestDistance || smallestDistance == 0); ++yPos )
 		{
 			++steps
@@ -757,7 +755,7 @@ DropArea {
 				clearAreaX1 = tileXPos
 				clearAreaY1 = yPos
 				clearAreaX2 = tileXPos+tileWidth-1
-				clearAreaY2 = yPos+tileHeight-1
+				clearAreaY2 = yPos+heightToCheck-1
 
 				break
 			}
@@ -790,8 +788,11 @@ DropArea {
 	function isAreaEmpty( x, y, w, h, tileToIgnore ) {
 		for (var localX = x; localX < x+w; ++localX) {
 			for (var localY = y; localY < y+h; ++localY) {
-				if (localY < 0 || localY >= hitBox.length || localX < 0 || localX >= hitBox[localY].length) {
-					return false
+				if (localY < 0 || localX < 0 || localX >= hitBox[0].length) {
+					return false  // Above or outside column bounds — invalid
+				}
+				if (localY >= hitBox.length) {
+					continue  // Below current tile extent — genuinely empty
 				}
 				if (hitBox[localY][localX]) {
 					if (tileToIgnore == null) {
