@@ -4,14 +4,24 @@ import org.kde.plasma.core as PlasmaCore
 
 Item {
 	id: tileItem
-	x: modelData.x * cellBoxSize
-	y: modelData.y * cellBoxSize
+	property int pushedFromX: -1
+	property int pushedFromY: -1
 	width: modelData.w * cellBoxSize
 	height: modelData.h * cellBoxSize
 
+	//For push/snapback animations
+	property real targetX: modelData.x * cellBoxSize
+	property real targetY: modelData.y * cellBoxSize
+	x: targetX
+	y: targetY
+	Behavior on targetX { NumberAnimation { duration: 150; easing.type: Easing.OutQuad } }
+	Behavior on targetY { NumberAnimation { duration: 150; easing.type: Easing.OutQuad } }
+
 	function fixCoordinateBindings() {
-		x = Qt.binding(function(){ return modelData.x * cellBoxSize })
-		y = Qt.binding(function(){ return modelData.y * cellBoxSize })
+		targetX = Qt.binding(function(){ return modelData.x * cellBoxSize })
+		targetY = Qt.binding(function(){ return modelData.y * cellBoxSize })
+		x = Qt.binding(function(){ return targetX })
+		y = Qt.binding(function(){ return targetY })
 		z = 0
 	}
 
@@ -93,6 +103,8 @@ Item {
 
 	Drag.dragType: Drag.Automatic
 	Drag.proposedAction: Qt.MoveAction
+	Drag.hotSpot.x: width / 2
+	Drag.hotSpot.y: height / 2
 
 	// We use this drag pattern to use the internal drag with events.
 	// https://stackoverflow.com/a/24729837/947742
@@ -107,8 +119,8 @@ Item {
 			tileItem.z = 1
 			Drag.start()
 		} else {
-			// console.log("drag finished")
-			// console.log('DragArea.onDrop', draggedItem)
+			console.log("drag finished")
+			console.log('DragArea.onDrop', draggedItem)
 			Qt.callLater(tileGrid.resetDrag)
 			Qt.callLater(tileItem.fixCoordinateBindings)
 			Drag.drop() // Breaks QML context.
