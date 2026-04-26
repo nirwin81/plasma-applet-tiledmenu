@@ -100,7 +100,6 @@ DropArea {
 		addedItem = null
 	}
 	function resetDrag() {
-		console.log('resetDrag!')
 		// Restore coordinate bindings for group members before draggedIndex is cleared
 		for (var i = 0; i < draggedGroupMembers.length; i++) {
 			var idx = tileModel.indexOf(draggedGroupMembers[i])
@@ -153,7 +152,6 @@ DropArea {
 	function tileWithin(tile, x1, y1, x2, y2) {
 		var tileX2 = tile.x + tile.w - 1
 		var tileY2 = tile.y + tile.h - 1
-		//console.log('tileWithin details: ', tile.x, ' ', tile.y, ' ', tile.w, ' ', tile.h)
 		return (x1 <= tileX2
 			&& tile.x <= x2
 			&& y1 <= tileY2
@@ -163,7 +161,6 @@ DropArea {
 	}
 
 	function isAreaWithinArea(a1x1, a1y1, a1x2, a1y2, a2x1, a2y1, a2x2, a2y2) {
-		//console.log('tileWithin details: ', a1x1, ' ', a1y1, ' ', a1x2, ' ', a1y2)
 		return (a2x1 <= a1x2
 			&& a1x1 <= a2x2
 			&& a2y1 <= a1y2
@@ -292,7 +289,6 @@ DropArea {
 
 	function moveTile(tile, cellX, cellY) {
 		if (isNaN(cellX) || isNaN(cellY) || cellX === null || cellY === null) {
-			//console.log('moveTile: bad coordinates', cellX, cellY, JSON.stringify(tile))
 			return
 		}
 		if (tile.tileType == "group") {
@@ -300,7 +296,6 @@ DropArea {
 		}
 		tile.x = cellX
 		tile.y = cellY
-		//console.log('Resetting pushedFrom values 2')
 		tile.pushedFromX = -1
 		tile.pushedFromY = -1
 		tileGrid.tileModelChanged()
@@ -310,7 +305,6 @@ DropArea {
 
 	function moveTileAnimated(tile, cellX, cellY) {
 		if (isNaN(cellX) || isNaN(cellY) || cellX === null || cellY === null) {
-			//console.log('moveTileAnimated: bad coordinates', cellX, cellY, JSON.stringify(tile))
 			return
 		}
 		if (tile.tileType == "group") {
@@ -329,13 +323,10 @@ DropArea {
 
 	function pushTile(tile, cellX, cellY) {
 		if (isNaN(cellX) || isNaN(cellY) || cellX === null || cellY === null) {
-			//console.log('pushTile: bad coordinates', cellX, cellY, JSON.stringify(tile))
 			return
 		}
-		//console.log('~~~ pushTile')
 		if (tile.pushedFromX === -1) tile.pushedFromX = tile.x
 		if (tile.pushedFromY === -1) tile.pushedFromY = tile.y
-		//console.log('///// Tile pushed from ',tile.pushedFromX,',',tile.pushedFromY,' to ',cellX,',',cellY)
 		if (tile.tileType == "group") {
 			moveGroupContentsAnimated(tile, cellX - tile.x, cellY - tile.y)
 		}
@@ -411,7 +402,6 @@ DropArea {
 	}
 
 	function applyTilePush(tile) {
-		//console.log('Resetting pushedFrom values 4')
 		pushedFromX = -1
 		pushedFromY = -1
 	}
@@ -429,8 +419,6 @@ DropArea {
 		scrollUpArea.checkContains(event)
 		scrollDownArea.checkContains(event)
 
-		//console.log('draggedItem: ', draggedItem)
-		//console.log('draggedItem tileType: ', draggedItem.tileType)
 		var tileGroup = null
 		if (draggedItem) {
 			if (draggedItem.tileType == "group") {
@@ -484,12 +472,10 @@ DropArea {
 		dropHoverY = Math.max(0, modelY)
 
 		// First try to 'snapback' anything that was being pushed
-		//console.log('*** Attempting snapbacks')
 		if (dynamicPusher) {
 			for (var pushedIndex = pushedTiles.length-1; pushedIndex >= 0; --pushedIndex) {
 				var pushedTile = pushedTiles[pushedIndex]
 				if( pushedTile ) {
-					//console.log('Pushed tile found: ', pushedTile)
 					if (snapbackTile(pushedTile)) {
 						pushedTiles.splice(pushedTiles.indexOf(pushedTile), 1)
 					}
@@ -510,7 +496,6 @@ DropArea {
 
 		// Move group members to follow the dragged group header
 		if (isDraggingGroup) {
-			console.log('Dragging a group')
 			var deltaX = dropHoverX - draggedItem.x
 			var deltaY = dropHoverY - draggedItem.y
 			for (var mi = 0; mi < draggedGroupMembers.length; mi++) {
@@ -534,7 +519,6 @@ DropArea {
 		for (var i = 0; i < tileModel.length; i++) {
 			var tile = tileModel[i]
 			if (isNaN(tile.y) || isNaN(tile.h) || isNaN(tile.x) || isNaN(tile.w)) {
-				//console.log('NaN tile at index', i, JSON.stringify(tile))
 				continue
 			}
 			c = Math.max(c, tile.x + tile.w)
@@ -543,12 +527,9 @@ DropArea {
 			h = Math.max(h, tile.h)
 		}
 		// Add extra rows when dragging so we can drop scrolled down
-		//console.log('updateSize')
 		var groupItem = null
-		//console.log('isDraggingGroup = ', isDraggingGroup)
 		if (draggedItem && draggedItem.tileType == "group")
 		{
-			//console.log('draggedItem = ', draggedItem)
 			groupItem = draggedItem
 		}
 		if (draggedItem) {
@@ -558,30 +539,19 @@ DropArea {
 
 		// Rebuild hitBox (2D grid of tile locations)
 		var hbColumns = Math.max(minColumns, c)
-		//console.log('minRows = ', minRows)
-		//console.log('r = ', r)
 		var hbRows = Math.max(minRows, r)
 		var hb = new Array(hbRows)
 		for (var i = 0; i < hbRows; i++) {
 			hb[i] = new Array(hbColumns)
 		}
-		//console.log('groupItem is: ', groupItem)
 		for (var i = 0; i < tileModel.length; ++i) {
 			var tile = tileModel[i]
-			//console.log('tile is: ', tile)
-			//console.log('tile is located at (x): ', tile.x, ',', tile.y)
-			//console.log('draggedIndex: ', draggedIndex)
-			//console.log('i: ', i)
-			if(groupItem) {
-				//console.log('isTileInGroup: ', isTileInGroup(groupItem, tile))
-			}
 			if (i == draggedIndex) {
 				continue;	// Don't mark the dragged header's space as in use
 			}
 			if (draggedGroupMembers.length > 0 && draggedGroupMembers.indexOf(tile) >= 0) {
 				continue;	// Don't mark dragged group's members as in use either
 			}
-			//console.log('Marking this tile as occupied')
 			for (var j = tile.y; j < tile.y + tile.h; j++) {
 				for (var k = tile.x; k < tile.x + tile.w; k++) {
 					hb[j][k] = true
@@ -621,7 +591,6 @@ DropArea {
 		var bestYPos = -1
 		var tile = getTileAt( tileXPos, tileYPos )
 		if (!tile) {
-			//console.log('Failed to find an expected tile at the provided co-ordinates (', tileXPos, ',', tileYPos, ')')
 			return false
 		}
 		var tileWidth = tile.w
@@ -641,12 +610,10 @@ DropArea {
 		for( var xPos = tileXPos-1; xPos >= 0 && (steps < smallestDistance || smallestDistance == 0); --xPos )
 		{
 			++steps
-			//console.log('Checking if area is empty: ', xPos, ',', tileYPos, ' ', xPos+tileWidth-1, ',', tileYPos+tileHeight-1)
 			if ( isAreaEmpty(xPos, tileYPos, tileWidth, tileHeight, tile) &&
 				!isAreaWithinArea(xPos, tileYPos, xPos+tileWidth-1, tileYPos+tileHeight-1, avoidX, avoidY, avoidX+avoidW-1, avoidY+avoidH-1) &&
 				(!isDraggingGroup || !isAreaInAnyGroup(xPos, tileYPos, tileWidth, tileHeight, tileGroupHeader)) )
 			{
-				//console.log('Empty area found (', steps, ' steps)')
 				smallestDistance = steps
 				bestXPos = xPos
 				bestYPos = tileYPos
@@ -670,7 +637,6 @@ DropArea {
 				!isAreaWithinArea(xPos, tileYPos, xPos+tileWidth-1, tileYPos+tileHeight-1, avoidX, avoidY, avoidX+avoidW-1, avoidY+avoidH-1) &&
 				(!isDraggingGroup || !isAreaInAnyGroup(xPos, tileYPos, tileWidth, tileHeight, tileGroupHeader)) )
 			{
-				//console.log('Empty area found right (', steps, ' steps)')
 				smallestDistance = steps
 				bestXPos = xPos
 				bestYPos = tileYPos
@@ -697,7 +663,6 @@ DropArea {
 				!isAreaWithinArea(tileXPos, yPos, tileXPos+tileWidth-1, yPos+tileHeight-1, avoidX, avoidY, avoidX+avoidW-1, avoidY+avoidH-1) &&
 				(!isDraggingGroup || !isAreaInAnyGroup(tileXPos, yPos, tileWidth, tileHeight, tile.tileType == 'group' ? tile : tileGroupHeader)) )
 			{
-				//console.log('Empty area found up (', steps, ' steps)')
 				smallestDistance = steps
 				bestXPos = tileXPos
 				bestYPos = yPos
@@ -722,7 +687,6 @@ DropArea {
 				!isAreaWithinArea(tileXPos, yPos, tileXPos+tileWidth-1, yPos+heightToCheck-1, avoidX, avoidY, avoidX+avoidW-1, avoidY+avoidH-1) &&
 				(!isDraggingGroup || !isAreaInAnyGroup(tileXPos, yPos, tileWidth, heightToCheck, tile.tileType == 'group' ? tile : tileGroupHeader)) )
 			{
-				//console.log('Empty area found down (', steps, ' steps)')
 				smallestDistance = steps
 				bestXPos = tileXPos
 				bestYPos = yPos
@@ -737,10 +701,6 @@ DropArea {
 		}
 
 		if(smallestDistance > 0) {
-			console.log('**** Pushing tile')
-			console.log('Area determined to be empty: ', clearAreaX1,',',clearAreaY1,' ',clearAreaX2,',',clearAreaY2)
-			console.log('Push distance: ',smallestDistance)
-			console.log('Area to avoid: ',avoidX,',',avoidY,' ',avoidX + avoidW-1,',',avoidY + avoidH-1)
 			pushTile(tile, bestXPos, bestYPos)
 			return true
 		}
@@ -812,7 +772,6 @@ DropArea {
 					if(tileGroupToIgnore && (hitTile == tileGroupToIgnore || draggedGroupMembers.indexOf(hitTile) >= 0 || isTileInGroup(tileGroupToIgnore, hitTile))) {
 						continue;
 					}
-					//console.log('Didnt ignore tile')
 
 					// Handle pushing if necessary
 					if( !allowPushing ) {
@@ -833,7 +792,6 @@ DropArea {
 							if( !tryPushTile(hitTile.x, hitTile.y, x, y, w, h) ) {
 								return true
 							} else {
-								//console.log('////// recording a pushed tile. ',hitTile.pushedFromX,',',hitTile.pushedFromY)
 								if (pushedTiles.indexOf(hitTile) == -1) {
 									pushedTiles.push( hitTile )
 								}
@@ -868,15 +826,6 @@ DropArea {
 				tileList.push(tile)
 			}
 		}
-
-		// Sort results by y, then by x
-		// tileList.sort(function(a, b) {
-		// 	if (a.y == b.y) {
-		// 		return b.x - a.x
-		// 	} else {
-		// 		return b.y - a.y
-		// 	}
-		// })
 
 		return tileList
 	}
