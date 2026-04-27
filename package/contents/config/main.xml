@@ -115,7 +115,7 @@
 			<default>36</default>
 		</entry>
 		<entry name="searchFieldHeight" type="int">
-			<default>48</default>
+			<default>28</default>
 		</entry>
 		<entry name="appListWidth" type="int">
 			<default>350</default>
