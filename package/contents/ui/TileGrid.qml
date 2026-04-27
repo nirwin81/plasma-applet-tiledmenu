@@ -433,7 +433,7 @@ DropArea {
 				var url = event.getDataAsString('favoriteId')
 				url = Utils.parseDropUrl(url)
 			} else {
-				var url = event.urls[0]
+				var url = event.urls[0].toString()
 				// console.log('new addedItem', event.urls, url)
 				url = Utils.parseDropUrl(url)
 			}
@@ -452,7 +452,7 @@ DropArea {
 			dropHoverY = modelY
 
 			// Firefox/Chromium url dropped
-			if (event.keys.indexOf('_NETSCAPE_URL')) {
+			if (event.keys.indexOf('_NETSCAPE_URL') >= 0) {
 				var netscapeUrl = event.getDataAsString('_NETSCAPE_URL')
 				var tokens = netscapeUrl.split('\n')
 				if (tokens.length >= 2) {
@@ -488,7 +488,7 @@ DropArea {
 		// re-computing getGroupAreaRect(draggedItem), which can be corrupted when pushed
 		// groups land in the dragged group's original column range.
 		var dropHeightToCheck = dropHeight
-		if (draggedItem.tileType == "group" && draggedGroupContentHeight > 0) {
+		if (draggedItem && draggedItem.tileType == "group" && draggedGroupContentHeight > 0) {
 			dropHeightToCheck += draggedGroupContentHeight
 		}
 
