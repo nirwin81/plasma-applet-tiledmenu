@@ -1,3 +1,16 @@
+## v47 - April 27 2026
+
+* Added dynamic pusher for tile grid
+* Re-implemented tile movement animations
+* Right clicking Search Results is fixed
+* Drag and Drop functionality for Folders & URLs is restored
+* Fixed incorrect sizing that resulted from the move to Qt6
+* Improved default sizing
+* Re-added 'Tiles only' mode
+* Improved prompt text in Search bar for general use
+* Fixed the 'Preset Tiles'. Images couldn't be downloaded. This needs to go in its own folder, but this will do for now.
+* Fixed tooltips appearing behind the 'Alphabetical', 'Categories' and 'Tiles Only' buttons.
+
 ## v46 - March 30 2024
 
 * **Plasma 6 TODO:**
