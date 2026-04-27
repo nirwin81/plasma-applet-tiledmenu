@@ -49,13 +49,6 @@ Item {
 			// }
 
 			SidebarViewButton {
-				appletIconName: "view-tilesonly"
-				tooltipText: i18n("Tiles Only")
-				onClicked: searchView.showTilesOnly()
-				checked: searchView.showingOnlyTiles
-				visible: checked || plasmoid.configuration.defaultAppListView == 'TilesOnly'
-			}
-			SidebarViewButton {
 				appletIconName: "view-list-alphabetically"
 				tooltipText: i18n("Alphabetical")
 				onClicked: appsView.showAppsAlphabetically()
@@ -66,6 +59,12 @@ Item {
 				tooltipText: i18n("Categories")
 				onClicked:  appsView.showAppsCategorically()
 				checked: searchView.showingAppsCategorically
+			}
+			SidebarViewButton {
+				appletIconName: "view-tilesonly"
+				tooltipText: i18n("Tiles Only")
+				onClicked: searchView.showTilesOnly()
+				checked: searchView.showingOnlyTiles
 			}
 			// SidebarItem {
 			// 	icon.name: 'system-search-symbolic'
